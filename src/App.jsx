@@ -2,7 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import aleoLogo from "./assets/aleo.svg";
 import "./App.css";
-import helloworld_program from "../helloworld/build/main.aleo?raw";
+import vote from "../helloworld/build/main.aleo?raw";
 import { AleoWorker } from "./workers/AleoWorker.js";
 
 const aleoWorker = AleoWorker();
@@ -20,9 +20,9 @@ function App() {
   async function execute() {
     setExecuting(true);
     const result = await aleoWorker.localProgramExecution(
-      helloworld_program,
-      "main",
-      ["5u32", "5u32"],
+      vote,
+      "propose",
+      ['{title:1field,content:1field,proposer:aleo10jukdehyxg66gcey8lklu9t0edfmh6m4jtxyq2rmut84nsxqtq9qjzujqq}'],
     );
     setExecuting(false);
 
@@ -32,7 +32,7 @@ function App() {
   async function deploy() {
     setDeploying(true);
     try {
-      const result = await aleoWorker.deployProgram(helloworld_program);
+      const result = await aleoWorker.deployProgram(vote);
       console.log("Transaction:")
       console.log("https://explorer.hamp.app/transaction?id=" + result)
       alert("Transaction ID: " + result);

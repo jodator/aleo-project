@@ -27,6 +27,23 @@ async function localProgramExecution(program, aleoFunction, inputs) {
   return executionResponse.getOutputs();
 }
 
+
+async function onChainProgramExecution(program, aleoFunction, inputs) {
+  const programManager = new ProgramManager();
+
+  // Create a temporary account for the execution of the program
+  const account = new Account();
+  programManager.setAccount(account);
+
+  const executionResponse = await programManager.execute(
+    program,
+    aleoFunction,
+    inputs,
+    false,
+  );
+  return executionResponse.getOutputs();
+}
+
 async function getPrivateKey() {
   const key = new PrivateKey();
   return proxy(key);
@@ -68,5 +85,5 @@ async function deployProgram(program) {
   return tx_id;
 }
 
-const workerMethods = { localProgramExecution, getPrivateKey, deployProgram };
+const workerMethods = { localProgramExecution, onChainProgramExecution, getPrivateKey, deployProgram };
 expose(workerMethods);
